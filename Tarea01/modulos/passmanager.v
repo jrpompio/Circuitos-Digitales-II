@@ -17,7 +17,6 @@ parameter rightPin =   6'b100000;
 parameter mypass = 8'b00100110;   // B97026: 26 ---> 0010 0110
                                 // 0x26 = 8'b00100110
 
-
 reg [5:0] state;
 reg [5:0] nextState;
 
