@@ -1,5 +1,5 @@
-`include "modulos/passmanager.v"
-`include "modulos/gatemanager.v"
+`include "passmanager.v"
+`include "gatemanager.v"
 
 module parkingmanager (
     input wire clk,
