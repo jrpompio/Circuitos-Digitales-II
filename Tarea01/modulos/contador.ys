@@ -1,8 +1,8 @@
 # read design 
-read_verilog modulos/parkingmanager.v
+read_verilog gatemanager.v
 
 # elaborate design hierarchy
-hierarchy -check -top parkingmanager
+hierarchy -check -top gatemanager
 
 # the high-level stuff
 # proc; opt; fsm; opt; memory; opt
@@ -20,4 +20,4 @@ techmap; opt
 clean
 
 # write synthesized design
-write_verilog parkingmanager.v
+write_verilog yosysger.v
