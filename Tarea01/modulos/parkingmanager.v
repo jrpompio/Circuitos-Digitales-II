@@ -36,7 +36,6 @@ gatemanager Uut2 (
 );
 
 assign passConection = pass;
-assign authenticated = authenticatedConection;
 assign gateState = gateStateConection;
 assign blockAlarm = blockAlarmConection;
 assign wrongPinAlarm =  wrongPinAlarmConection;

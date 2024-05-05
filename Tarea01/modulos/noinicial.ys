@@ -1,8 +1,8 @@
 # read design 
-read_verilog passmanager.v
+read_verilog parkingmanager.v
 
 # elaborate design hierarchy
-hierarchy -check -top passmanager
+hierarchy -check -top parkingmanager
 
 # the high-level stuff
 #proc; opt; fsm; opt; memory; opt
