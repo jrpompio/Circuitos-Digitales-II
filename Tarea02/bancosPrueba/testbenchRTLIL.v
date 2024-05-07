@@ -1,5 +1,4 @@
-`include "PM_synth.v"
-`include "cmos/cmos_cells.v" // Se usa rula relativa a directorio de Makefile
+`include "PM_synth_RTLIL.v"
 
 module testbench;
 

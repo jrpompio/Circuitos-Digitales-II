@@ -1,5 +1,6 @@
-synth: setTESTBsynth yosys all # DEFAULT
-normal: setTESTBnormal all
+normal: clean setTESTBnormal all rmvcd # DEFAULT
+rtlil: clean setTESTBrtlil yosysRTLIL all rmvcd
+synth: clean setTESTBsynth yosys all rmvcd 
 
 BINARY = salida.vvp
 TESTFILE = archivosPrueba/tester.v
@@ -9,8 +10,12 @@ TESTFILE4 = archivosPrueba/tester4.v
 
 setTESTBnormal: 
 		$(eval TESTB = bancosPrueba/testbenchConduc.v) 
+
 setTESTBsynth: 
 		$(eval TESTB = bancosPrueba/testbenchSynth.v) 
+
+setTESTBrtlil: 
+		$(eval TESTB = bancosPrueba/testbenchRTLIL.v) 
 
 all: plan1 plan2 plan3 plan4
 
@@ -20,32 +25,37 @@ plan1:$(TESTB) $(TESTFILE) # Archivos necesarios para correr esta orden.
 		iverilog -o $(BINARY) $(TESTB) $(TESTFILE) 
 		vvp $(BINARY) 
 		gtkwave ondas.gtkw
-		make clean
 
 plan2:$(TESTB) $(TESTFILE2) 
 		# EJECUTANDO PLAN 2
 		iverilog -o $(BINARY) $(TESTB) $(TESTFILE2)
 		vvp $(BINARY)
 		gtkwave ondas.gtkw
-		make clean
 
 plan3:$(TESTB) $(TESTFILE3) 
 		# EJECUTANDO PLAN 3
 		iverilog -o $(BINARY) $(TESTB) $(TESTFILE3)
 		vvp $(BINARY)
 		gtkwave ondas.gtkw
-		make clean
 
 plan4:$(TESTB) $(TESTFILE4) 
 		# EJECUTANDO PLAN 4
 		iverilog -o $(BINARY) $(TESTB) $(TESTFILE4)
 		vvp $(BINARY)
 		gtkwave ondas.gtkw
-		make clean
 
-# ESTA REGLA CREA LA SINTESIS CON YOSYS
+# ESTA REGLA CREA LA SINTESIS CON YOSYS USANDO ABC
 yosys:
 		yosys synth.ys
+
+# ESTA REGLA CREA LA SINTESIS CON YOSYS USANDO LIBRERIA INTERNA
+yosysRTLIL:
+		yosys synth_RTLIL.ys
+
 # ESTA REGLA LIMPIA LOS BINARIOS Y .vcd
-clean:
-		rm $(BINARY) ondas.vcd
+rmvcd:
+		rm *.vvp *.vcd
+		
+# Esta regla elimina los archivos genrados por yosys
+clean: 
+		rm PM_synth* &
