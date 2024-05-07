@@ -8,15 +8,6 @@ hierarchy -check -top parkingmanager
 # the high-level stuff
 proc; opt; fsm; opt; memory; opt
 
-# mapping to internal cell library
-#techmap; opt
-
-# mapping flip-flops to cmos_cells.lib
-
-# dfflibmap -liberty cmos/cmos_cells.lib
-
-# mapping logic to cmos_cells.lib
-# abc -liberty cmos/cmos_cells.lib
 
 #Generate GraphViz output
 show -colors 1
