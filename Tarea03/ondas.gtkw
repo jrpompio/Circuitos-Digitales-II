@@ -1,0 +1,62 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Tue May 21 10:58:13 2024
+[*]
+[dumpfile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea03/ondas.vcd"
+[dumpfile_mtime] "Tue May 21 10:58:02 2024"
+[dumpfile_size] 4016
+[savefile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea03/ondas.gtkw"
+[timestart] 0
+[size] 1364 717
+[pos] -1 -1
+*-8.583580 9840 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[sst_width] 199
+[signals_width] 224
+[sst_expanded] 1
+[sst_vpaned_height] 198
+@28
+testbench.UUT.TARJETA_RECIBIDA
+testbench.UUT.clk
+testbench.UUT.reset
+@c00024
+testbench.UUT.state[4:0]
+@28
+(0)testbench.UUT.state[4:0]
+(1)testbench.UUT.state[4:0]
+(2)testbench.UUT.state[4:0]
+(3)testbench.UUT.state[4:0]
+(4)testbench.UUT.state[4:0]
+@1401200
+-group_end
+@24
+testbench.UUT.BALANCE[63:0]
+testbench.UUT.FONDOS[63:0]
+@28
+testbench.UUT.TIPO_TRANS
+@22
+testbench.UUT.PIN[15:0]
+testbench.UUT.INPUT_PIN[15:0]
+testbench.UUT.DIGITO[3:0]
+@28
+testbench.UUT.DIGITO_STB
+testbench.UUT.ENTER_PIN
+@29
+testbench.TESTER.ERASE_PIN
+@24
+testbench.UUT.INTENTOS[1:0]
+@28
+testbench.UUT.MONTO_STB
+@22
+testbench.UUT.MONTO[31:0]
+testbench.UUT.TEMP_MONTO[31:0]
+@28
+testbench.UUT.PIN_CORRECTO
+testbench.UUT.PIN_INCORRECTO
+testbench.UUT.BLOQUEO
+testbench.UUT.ENTREGAR_DINERO
+testbench.UUT.FONDOS_INSUFICIENTES
+testbench.UUT.BALANCE_ACTUALIZADO
+testbench.UUT.ADVERTENCIA
+[pattern_trace] 1
+[pattern_trace] 0

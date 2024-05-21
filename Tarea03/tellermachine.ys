@@ -1,0 +1,29 @@
+# read design 
+read_verilog ATM.v
+
+# elaborate design hierarchy
+ hierarchy -check -top ATM
+
+# the high-level stuff
+ proc; opt;
+ fsm; opt; memory; opt
+
+# mapping to internal cell library
+ techmap
+
+# mapping flip-flops to cmos_cells.lib
+dfflibmap -liberty ./cmos/cmos_cells.lib
+
+# mapping logic to cmos_cells.lib
+abc -liberty ./cmos/cmos_cells.lib
+
+opt
+
+#Generate GraphViz output
+#show -colors 1
+
+# cleanup
+clean
+
+# write synthesized design
+write_verilog ATM_synth.v
