@@ -43,6 +43,7 @@ input TARJETA_RECIBIDA;    /**< Señal de entraba binaria que indica si se ha
 input [15:0] PIN;          /**< Entrada de 16 bits donde cada grupo de 4 bits 
                                 representa un digito del PIN de la tarjeta que
                                 se recibió*/
+
 input ERASE_PIN;           /**< Entrada binaria usada para reiniciar el PIN
                                 digitado por el usuario en el cajero */
 
@@ -62,7 +63,8 @@ input DIGITO_STB;          /**< Señal de entrada que se pone en 1 durante
 
 input ENTER_PIN;           /**< Señal para enviar el PIN ingresado
                                 para validar si es el PIN correcto
-                                cuando ENTER_PIN = 1                */
+                                cuando ENTER_PIN = 1; También para actualizar
+                                el monto                                   */
 
 input TIPO_TRANS;          /**< Entrada binaria que indica el tipo de
                                 transacción.
@@ -114,20 +116,26 @@ reg [1:0] INTENTOS;        /**< Registro interno de 2 bits que representa la
                                 al introducir el PIN de su tarjeta.
                                 2 intentos --> enciende ADVERTENCIA
                                 3 intentos --> enciende BLOQUEO */
+                                
+reg [1:0] nextINTENTOS;    /*   Registro para gestión de cantidad de intentos*/
 
 reg PIN_CORRECTO;          /**< Registro interno que tiene valor 1 cuando la 
                                 validación de PIN es correcta. */
 
-reg nextPIN_CORRECTO;          /**< Registro interno que tiene valor 1 cuando la*/ 
+reg nextPIN_CORRECTO;      /**< Registro interno para gestionar la señal
+                                interna de pin correcto                      */ 
 
-reg [1:0] nextINTENTOS;    /*   Registro para gestión de cantidad de intentos*/
 
 reg [15:0] INPUT_PIN;      /*   Registro para sostener temporalmente el PIN
                                 ingresado completo */
-reg [15:0] nextINPUT_PIN;      /*   Registro para sostener temporalmente el PIN */
+
+reg [15:0] nextINPUT_PIN;  /*   Registro para gestionar el pin temporal dentro
+                                del modulo */
 
 reg [31:0] TEMP_MONTO;    /*   Registro para sostener temporalmente el
                                 monto a depositar o retirar    */
+
+reg [31:0] nextTEMP_MONTO; /*  Registro para gestionar el monto temporal */
                                 
 /******************************************************************************
  *             Uso de parametros para definir estados 
@@ -138,7 +146,7 @@ parameter standby    = 5'b1;        // Estado de espera
 parameter validacion = 5'b10;       // Estado de gestión de pin
 parameter deposito   = 5'b100;      // Estado para transacción de deposito
 parameter retiro     = 5'b1000;     // Estado para transacción de retiuro
-parameter bloqueo    = 5'b10000;    // Estado en caso de pin incorrecto 3 veces
+parameter bloqueoE   = 5'b10000;    // Estado en caso de pin incorrecto 3 veces
 
 reg [4:0] state;                    // Registro para estado actual
 reg [4:0] nextState;                // Registro para estado futuro
@@ -149,33 +157,34 @@ reg [4:0] nextState;                // Registro para estado futuro
 
 always @(posedge clk) begin      // Acciones en flanco alto
   if (!reset) begin 
-    state <= standby;
-    BALANCE <= 64'b0;
-    INTENTOS <= 2'b0;
-    INPUT_PIN <= 16'b0;
-    TEMP_MONTO <= 31'b0;
+    state        <= standby;            // REINICIANDO VALORES DE FF
+    BALANCE      <= 64'b0;
+    INTENTOS     <= 2'b0;
+    INPUT_PIN    <= 16'b0;
+    TEMP_MONTO   <= 31'b0;
     PIN_CORRECTO <= 1'b0;
 
   end else begin
-    state <= nextState;          // Transición a estado futuro
-    BALANCE <= nextBALANCE;      // Transición para gestion del balance
-    INTENTOS <= nextINTENTOS;    // Transición para aumento de contador
-    INPUT_PIN <= nextINPUT_PIN;      // Transición para gestion del input pin
-    PIN_CORRECTO <= nextPIN_CORRECTO;
+    state         <= nextState;                   // TRANSICIONES DE ESTADOS DE FF
+    BALANCE       <= nextBALANCE;
+    INTENTOS      <= nextINTENTOS;
+    INPUT_PIN     <= nextINPUT_PIN;
+    PIN_CORRECTO  <= nextPIN_CORRECTO;
+    TEMP_MONTO    <= nextTEMP_MONTO;
   end
 end
 
 always @(*) begin                // Lógica combinacional
   
-  nextState = state;             // Sosteniendo estado actual
-  nextINTENTOS = INTENTOS;       // Sosteniendo contador actual
-  nextBALANCE = BALANCE;         // Sosteniendo el valor del balance
+  nextState = state;      
+  nextINTENTOS = INTENTOS;          // SOSTENIENDO VALORES DE FF
+  nextBALANCE = BALANCE;   
   nextINPUT_PIN = INPUT_PIN;
   nextPIN_CORRECTO = PIN_CORRECTO;
-  
+  nextTEMP_MONTO = TEMP_MONTO;
 
-  ENTREGAR_DINERO = 1'b0;
-  FONDOS_INSUFICIENTES = 1'b0;
+  ENTREGAR_DINERO = 1'b0;           // VALORES OUTPUT = 0; excepto en los 
+  FONDOS_INSUFICIENTES = 1'b0;      // estados en los que cambia.
   BALANCE_ACTUALIZADO = 1'b0;
   BLOQUEO = 1'b0;
   PIN_INCORRECTO = 1'b0;
@@ -186,14 +195,14 @@ always @(*) begin                // Lógica combinacional
   case(state)
 
     standby: begin
-
-
-               
-               if (TARJETA_RECIBIDA) begin      // Ingreso de tarjeta
+               if (~TARJETA_RECIBIDA) begin      // Ingreso de tarjeta
+                  nextState = standby;
+               end else begin
                   nextState = validacion;       // pasa a validación
                   nextBALANCE = FONDOS;         // obtención del dato FONDOS
                end
              end
+
     validacion: begin
                   /* Para el caso de pin correcto, se envia a la transacción
                   deseada */
@@ -221,33 +230,36 @@ always @(*) begin                // Lógica combinacional
                         nextINTENTOS = INTENTOS+1;
                      end
 
-                  // Al haber dos intentos, se envia advertencia
-                  end else if (INTENTOS == 2) begin
-                        ADVERTENCIA = 1;
-                  // En 3 intentos se pasa al estado de bloqueo
-                  end else if (INTENTOS == 3) begin
-                     nextState = bloqueo;
-                  
                   // Se usa un shifteo de 4, para agrupar los digitos
                   // del pin en INPUT_PIN
                   end else if (DIGITO_STB) begin
                     nextINPUT_PIN = (INPUT_PIN << 4) | DIGITO;
+                  
+                  // Al haber dos intentos, se envia advertencia
+                  end else if (INTENTOS == 2'b10) begin
+                        ADVERTENCIA = 1;
+                  // En 3 intentos se pasa al estado de bloqueo
+                  end else if (INTENTOS == 2'b11) begin
+                     BLOQUEO = 1;
+                     nextState = bloqueoE;
                   end else begin
                      nextState = validacion;
                   end
                 end
+
     deposito: begin
                 if (MONTO_STB) begin
-                   TEMP_MONTO = MONTO;
+                   nextTEMP_MONTO = MONTO;
                 end else if (ENTER_PIN) begin
                    nextBALANCE = BALANCE + TEMP_MONTO;
                    BALANCE_ACTUALIZADO = 1;
                 end
 
               end
+
     retiro: begin
                if (MONTO_STB) begin
-                  TEMP_MONTO = MONTO;
+                  nextTEMP_MONTO = MONTO;
                end else if (ENTER_PIN) begin
                   if (BALANCE >= TEMP_MONTO) begin
                      nextBALANCE = BALANCE - TEMP_MONTO;
@@ -256,13 +268,12 @@ always @(*) begin                // Lógica combinacional
                      nextState = standby;
                   end else if (BALANCE < TEMP_MONTO)  begin
                      FONDOS_INSUFICIENTES = 1;
-                     nextState = standby; 
                   end
                end
             end
     
-    bloqueo:   begin
-                  BLOQUEO = 1;
+    bloqueoE:  begin
+                     BLOQUEO = 1;
                end
     
     default: nextState = standby;

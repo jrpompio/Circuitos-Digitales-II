@@ -1,0 +1,21 @@
+\section{Descripción arquitectonica}
+\begin{figure}[H]\label{fig:ATM}
+    \centering
+    \includesvg[width=0.7\textwidth]{imagenes/ATM.svg}
+    \caption{Diagrama de estados de cajero automatico}
+\end{figure}
+
+La entrada reset a IDLE que se encuentra al aire, significa que en cualquier
+momento en el que reset llegue a cero la maquina de estados irá al estado IDLE
+\\
+
+Transición de estados
+\begin{itemize}
+    \item IDLE a validacion, necesita el ingreso de una tarjeta
+    \item validacion a deposito, necesita el pin correcto y un cero en el tipo
+    de transacción
+    \item validacion a retiro, necesita el pin correcto y un uno en el tipo
+    de transacción
+    \item validacion a bloqueo, necesita que el contador de intentos llegue a 3
+\end{itemize}
+

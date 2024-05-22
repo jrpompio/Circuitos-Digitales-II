@@ -6,7 +6,8 @@ read_verilog ATM.v
 
 # the high-level stuff
  proc; opt;
- fsm; opt; memory; opt
+ fsm; opt;
+ memory; opt
 
 # mapping to internal cell library
  techmap
@@ -20,7 +21,7 @@ abc -liberty ./cmos/cmos_cells.lib
 opt
 
 #Generate GraphViz output
-#show -colors 1
+show -colors 1
 
 # cleanup
 clean

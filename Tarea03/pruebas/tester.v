@@ -82,6 +82,9 @@ initial
      ENTER_PIN = 0;
      TARJETA_RECIBIDA = 0;
     #ciclo
+      reset = 0;
+    #ciclo
+      reset = 1;
     #ciclo
     $finish;
   end     

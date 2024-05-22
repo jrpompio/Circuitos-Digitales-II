@@ -1,0 +1,73 @@
+\section{Planes de pruebas}
+\subsection{Plan 1}
+    Acá se muestra la interacción del modulo ante un deposito.
+    Para ello se ingresa la tarjeta, el monto, y el pin correcto,
+    como resultado se debe obtener que el balance aumente en la cantidad
+    del monto ingresado 
+ 
+    \subsection{Plan 2}
+ Acá se muestra la interacción del modulo ante un intento de retiro con
+ fondos insuficientes y un retiro efectuado.
+ Para ello se ingresa la tarjeta, un monto mayor al balance y el pin correcto
+ posteriormente se cambia el valor del monto a un monto menor para poder
+ mostrar como se encuente la señal de salida de fondos insuficientes y
+ posteriormente esta se apaga y se enciente la señal de entrega de dinero y de
+ balance actualizado, debido a que el monto ingresado fue menor al balance.
+
+ \subsection{Plan 3}
+ Acá se muestra la interacción del modulo ante el error de pin 3 veces
+ mostrando las alartas de advertencia y bloqueo.
+Para ello se ingresa la tarjeta, y se ingresa una clave incorrecta
+se presiona enter 3 veces y como resultado se obtendrá
+que se enciente la salida de pin incorrecto en cada ingreso,
+ después la señal de advertencia cuando el contador de intentos llega a 2,
+ después la señal de bloqueo cuando el contador de intentos llega a 3.
+
+
+ \textbf{NOTA:} Todas las pruebas fueron exitosas tanto para el modulo
+ conductual como para el modulo sintetizado.
+
+ \section{Instrucciones de simulación}
+
+ Para esta sección se introducirá el archivo README.md que está en la carpeta
+ de la tarea 03.
+
+\begin{minted}{python3}
+    
+### Plan 1:
+#### Acá se muestra la interacción del modulo ante un deposito.
+### Plan 2:
+#### Acá se muestra la interacción del modulo ante un intento de retiro con
+#### fondos insuficientes y un retiro efectuado.
+### Plan 3:
+#### Acá se muestra la interacción del modulo ante el error de pin 3 veces
+#### mostrando las alartas de advertencia y bloqueo.
+
+
+
+### Copilaciones:
+#### Para copilar el plan 1 con el modulo conductual
+    make copile
+#### Para copilar el plan 2 con el modulo conductual
+    make copile2
+#### Para copilar el plan 3 con el modulo conductual
+    make copile3
+
+#### Para copilar el plan 1 con el modulo sintetizado
+    make copile4
+#### Para copilar el plan 2 con el modulo sintetizado
+    make copile5
+#### Para copilar el plan 3 con el modulo sintetizado
+    make copile6
+
+### ejecuciones
+#### Para ejecutar el script de yosys
+    yosys tellermachine.ys
+#### Para ejecutar lo copilado
+    make run
+
+##### NOTA\: el comando run también elimita el archivo vcd generado y el vpp
+##### esto debido a que así se puede ejecutar los archivos recien copilados
+##### y así probando que se llega al mismo resultado.
+
+\end{minted}

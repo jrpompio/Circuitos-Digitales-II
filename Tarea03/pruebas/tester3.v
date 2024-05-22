@@ -44,7 +44,9 @@ initial
     #0.1
       reset = 0;
     #ciclo
+    #ciclo
       reset = 1;              //
+      DIGITO = 4'b1001;       //  PRIMER DIGITO                  
     #ciclo      
       DIGITO = 4'b1001;       //  PRIMER DIGITO                  
       DIGITO_STB = 1;                            
@@ -61,26 +63,26 @@ initial
     #ciclo
       DIGITO_STB = 0;         //                
     #ciclo
-      DIGITO = 4'b0100;       //  CUARTO DIGITO         
+      DIGITO = 4'b0000;       //  CUARTO DIGITO         
       DIGITO_STB = 1;                  
     #ciclo
       DIGITO_STB = 0;         //       
     #ciclo
       ENTER_PIN = 1;          // TECLA ENTER
     #ciclo
-      ENTER_PIN = 0;          //                  
+      ENTER_PIN = 0;
     #ciclo
-      MONTO = 21725;
-      MONTO_STB = 1;  
+      ENTER_PIN = 1;          // TECLA ENTER
     #ciclo
-      MONTO_STB = 0;
+      ENTER_PIN = 0;
     #ciclo
+      ENTER_PIN = 1;          // TECLA ENTER
     #ciclo
-      ENTER_PIN = 1;
+      ENTER_PIN = 0;
     #ciclo
-     ENTER_PIN = 0;
-     TARJETA_RECIBIDA = 0;
+      reset = 0;
     #ciclo
+      reset = 1;
     #ciclo
     $finish;
   end     

@@ -1,4 +1,4 @@
-// RETIRO y FONDOS INSUFICIENTES
+// FONDOS INSUFICIENTES y RETIRO
 `timescale 100 ms / 1 ms  // time-unit = 100ms , precision = 10 ms
 module tester (/*AUTOARG*/
    // Outputs
@@ -40,7 +40,7 @@ initial
     ERASE_PIN = 0;                          //
     PIN = 16'b1001100001110100;             //                         
     MONTO = 0;                              //
-    FONDOS = 64'b10000000;     //                                   
+    FONDOS = 64'b10000000000000;            //                                   
     #0.1
       reset = 0;
     #ciclo
@@ -75,12 +75,23 @@ initial
     #ciclo
       MONTO_STB = 0;
     #ciclo
+      ENTER_PIN = 1;
+    #ciclo
+     ENTER_PIN = 0;
+    #ciclo
+      MONTO = 7000;
+      MONTO_STB = 1;  
+    #ciclo
+      MONTO_STB = 0;
     #ciclo
       ENTER_PIN = 1;
     #ciclo
      ENTER_PIN = 0;
      TARJETA_RECIBIDA = 0;
     #ciclo
+      reset = 0;
+    #ciclo
+      reset = 1;
     #ciclo
     $finish;
   end     
