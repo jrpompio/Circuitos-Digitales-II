@@ -1,14 +1,12 @@
-module tester (/*AUTOARG*/
-   // Outputs
-   clk, reset, Switch,
-   // Inputs
-   gate
-   );
+module tester (/*AUTOARG*/);
 
-output reg clk;
-output reg reset;
-output reg Switch;
-input gate;
+output reg CLK;
+output reg REINICIO;
+output reg ARRANQUE;
+output reg MODO;
+/*AUTOOUTPUT*/
+input MOTOR1;
+input MOTOR2;
 
 
 parameter semiCiclo = 0.5;
@@ -16,19 +14,20 @@ parameter ciclo = 1;
 
 always
    begin
-      #semiCiclo clk=!clk;
+      #semiCiclo CLK=!CLK;
    end
 
 initial
   begin                                       
-    clk = 1;                      
-    reset = 1;
+    CLK = 1;                      
+    REINICIO = 0;
     #0.01
-    reset = 0;
+    REINICIO = 1;
     #ciclo
     #ciclo
-    reset = 1;
+    REINICIO = 0;
     #ciclo
+    
     $finish;
   end     
 
