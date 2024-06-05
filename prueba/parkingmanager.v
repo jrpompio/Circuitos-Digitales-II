@@ -32,23 +32,28 @@ reg [2:0] nextGstate;
 // ----------------------------------------------------------------------------
 // Reemplazando las salidas de reg por su relación a pines de los estados
 
-assign gateState = gstate[1];
-assign wrongPinAlarm = state[4];
-assign blockAlarm = gstate[2];
+assign gateState = gstate[1];    // Estado de la compuerta depende de este bit
+assign wrongPinAlarm = state[4]; // Estado de la alarma de pin incorrecto 
+                                 // depende de este valor
+assign blockAlarm = gstate[2];   // Estado de la alarma de bloqueo
+                                 // depende de este bit
 
 
-initial begin
+initial begin                   // Condiciones iniciales
     state = standby;
     gstate = gateClose;
 end
 
-always @(posedge clk) begin
-    state = nextState;
-    gstate = nextGstate;
+always @(posedge clk) begin     // Cambios por flanco
+    state <= nextState;
+    gstate <= nextGstate;
 end
 
 
-always begin   
+always @(*) begin               // Cambios secuenciales
+
+    nextState = state;
+    nextGstate = gstate;
 
 case (state)
     standby: begin

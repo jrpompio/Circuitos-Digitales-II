@@ -1,4 +1,9 @@
-module tester (/*AUTOARG*/);
+module tester (/*AUTOARG*/
+   // Outputs
+   CLK, REINICIO, ARRANQUE, MODO,
+   // Inputs
+   MOTOR1, MOTOR2
+   );
 
 output reg CLK;
 output reg REINICIO;
@@ -19,15 +24,16 @@ always
 
 initial
   begin                                       
-    CLK = 1;                      
-    REINICIO = 0;
-    #0.01
+    CLK = 0;                      
     REINICIO = 1;
     #ciclo
     #ciclo
     REINICIO = 0;
     #ciclo
-    
+    ARRANQUE = 1;
+    MODO = 1;
+    #ciclo
+    #100
     $finish;
   end     
 

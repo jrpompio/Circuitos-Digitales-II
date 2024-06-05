@@ -1,3 +1,10 @@
+#
+*.zip
+*.pdf
+Doxyfile
+Latex/*
+
+
 # Prerequisites
 *.d
 
@@ -50,3 +57,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# cosas de gtk o iverilog
+*.vcd
+*.vvp

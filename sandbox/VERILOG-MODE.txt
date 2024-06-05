@@ -1,0 +1,18 @@
+ 1993  emacs --batch mode.v -f verilog-batch-indent
+ 1996  emacs --batch mode.v -f verilog-batch-indent
+ 2061  emacs --batch mode.v -f verilog-batch-diff-auto --eval '(write-file "out.v")'
+ 2063  emacs --batch out.v -f verilog-batch-diff-auto --eval '(write-file "out.v")'
+ 2065  emacs --batch out.v -f verilog-batch-diff-auto --eval '(write-file "out.v")'
+ 2067  emacs --batch out.v -f verilog-batch-diff-auto --eval '(write-file "out.v")'
+ 2091  emacs --batch mode.v -f verilog-batch-auto --eval '(write-file "mode.v")'
+ 2092  emacs --batch mode.v -f verilog-batch-auto --eval '(write-file "mode.v")' && cat mode.v
+ 2094  emacs --batch mode.v -f verilog-batch-auto --eval '(write-file "mode.v")' && cat mode.v
+ 2095  emacs --batch mode.v -f verilog-batch-auto --eval '(write-file "mode.v")' && # && # && cat mode.v
+ 2096  emacs --batch mode.v -f verilog-batch-auto --eval '(write-file "mode.v")' && #h && #h && cat mode.v
+ 2097  emacs --batch mode.v -f verilog-batch-auto --eval '(write-file "mode.v")' && #h && #h && cat mode.v
+ 2098  emacs --batch mode.v -f verilog-batch-auto --eval '(write-file "mode.v")' && cat mode.v
+ 2103  emacs --batch mode.v -f verilog-batch-auto
+ 2117  emacs --batch mode.v -f verilog-batch-delete-auto
+ 2120  emacs --batch mode.v -f verilog-batch-inject-auto
+ 2138  history | grep verilog-batch
+ 2139  history | grep verilog-batch >> VERILOG-MODE.txt

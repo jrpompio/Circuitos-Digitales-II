@@ -1,0 +1,27 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Fri May 10 20:59:58 2024
+[*]
+[dumpfile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/ejemplos/arbitro/resultados.vcd"
+[dumpfile_mtime] "Fri May 10 20:59:13 2024"
+[dumpfile_size] 947
+[savefile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/ejemplos/arbitro/resultados.gtkw"
+[timestart] 0
+[size] 1366 718
+[pos] -183 -59
+*-6.660879 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] arbiter_tb.
+[sst_width] 199
+[signals_width] 78
+[sst_expanded] 1
+[sst_vpaned_height] 198
+@28
+arbiter_tb.U0.clock
+arbiter_tb.U0.gnt_0
+arbiter_tb.U0.gnt_1
+arbiter_tb.U0.req_0
+arbiter_tb.U0.req_1
+@29
+arbiter_tb.U0.reset
+[pattern_trace] 1
+[pattern_trace] 0

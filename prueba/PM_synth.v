@@ -89,7 +89,7 @@ module parkingmanager(clk, sensorA, sensorB, pass, gateState, wrongPinAlarm, blo
   output gateState;
   (* init = 3'h1 *)
   (* src = "parkingmanager.v:29" *)
-  wire [2:0] gstate;
+  reg [2:0] gstate = 3'h1;
   (* src = "parkingmanager.v:30" *)
   wire [2:0] nextGstate;
   (* src = "parkingmanager.v:22" *)
@@ -102,7 +102,7 @@ module parkingmanager(clk, sensorA, sensorB, pass, gateState, wrongPinAlarm, blo
   input sensorB;
   (* init = 6'h01 *)
   (* src = "parkingmanager.v:21" *)
-  wire [5:0] state;
+  reg [5:0] state = 6'h01;
   (* src = "parkingmanager.v:7" *)
   output wrongPinAlarm;
   NOT _078_ (
@@ -435,7 +435,7 @@ module parkingmanager(clk, sensorA, sensorB, pass, gateState, wrongPinAlarm, blo
     .Y(_075_)
   );
   NOR _147_ (
-    .A(pass[0]),
+    .A(pass[7]),
     .B(_019_),
     .Y(_076_)
   );
@@ -454,13 +454,13 @@ module parkingmanager(clk, sensorA, sensorB, pass, gateState, wrongPinAlarm, blo
     .Y(_001_)
   );
   NOR _151_ (
-    .A(pass[3]),
-    .B(pass[4]),
+    .A(pass[0]),
+    .B(pass[3]),
     .Y(_002_)
   );
   NOR _152_ (
-    .A(pass[6]),
-    .B(pass[7]),
+    .A(pass[4]),
+    .B(pass[6]),
     .Y(_003_)
   );
   NAND _153_ (
@@ -522,60 +522,33 @@ module parkingmanager(clk, sensorA, sensorB, pass, gateState, wrongPinAlarm, blo
     .B(_010_),
     .Y(nextState[5])
   );
-  (* src = "parkingmanager.v:45" *)
-  DFF _165_ (
-    .C(clk),
-    .D(nextState[0]),
-    .Q(state[0])
-  );
-  (* src = "parkingmanager.v:45" *)
-  DFF _166_ (
-    .C(clk),
-    .D(nextState[1]),
-    .Q(state[1])
-  );
-  (* src = "parkingmanager.v:45" *)
-  DFF _167_ (
-    .C(clk),
-    .D(nextState[2]),
-    .Q(state[2])
-  );
-  (* src = "parkingmanager.v:45" *)
-  DFF _168_ (
-    .C(clk),
-    .D(nextState[3]),
-    .Q(state[3])
-  );
-  (* src = "parkingmanager.v:45" *)
-  DFF _169_ (
-    .C(clk),
-    .D(nextState[4]),
-    .Q(state[4])
-  );
-  (* src = "parkingmanager.v:45" *)
-  DFF _170_ (
-    .C(clk),
-    .D(nextState[5]),
-    .Q(state[5])
-  );
-  (* src = "parkingmanager.v:45" *)
-  DFF _171_ (
-    .C(clk),
-    .D(nextGstate[0]),
-    .Q(gstate[0])
-  );
-  (* src = "parkingmanager.v:45" *)
-  DFF _172_ (
-    .C(clk),
-    .D(nextGstate[1]),
-    .Q(gstate[1])
-  );
-  (* src = "parkingmanager.v:45" *)
-  DFF _173_ (
-    .C(clk),
-    .D(nextGstate[2]),
-    .Q(gstate[2])
-  );
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      state[0] <= nextState[0];
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      state[1] <= nextState[1];
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      state[2] <= nextState[2];
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      state[3] <= nextState[3];
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      state[4] <= nextState[4];
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      state[5] <= nextState[5];
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      gstate[0] <= nextGstate[0];
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      gstate[1] <= nextGstate[1];
+  (* src = "parkingmanager.v:47" *)
+  always @(posedge clk)
+      gstate[2] <= nextGstate[2];
   assign blockAlarm = gstate[2];
   assign gateState = gstate[1];
   assign wrongPinAlarm = state[4];

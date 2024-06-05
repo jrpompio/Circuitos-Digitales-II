@@ -5,3 +5,4 @@ copile:
 	./salida.exe
 run:
 	gtkwave ondas.gtkw
+	rm *.vcd *.exe &

@@ -37,13 +37,13 @@ reg [N-1:0]nextState;
                               COMPORTAMIENTOS
  *****************************************************************************/
 always @(posedge CLK) begin // LÓGICA SECUENCIAL
-  if (reset) begin             
+  if (REINICIO) begin             
                               // REINICIO DE VALORES DE FF
   /*AUTORESET*/
   // Beginning of autoreset for uninitialized flops
-  BATERIA <= 10'h0;
-  TANQUE <= 10'h0;
-  state <= {N{1'b0}};
+  BATERIA <= 0;
+  TANQUE <= 0;
+  state <= INICIO;
   // End of automatics
 
   end else begin              

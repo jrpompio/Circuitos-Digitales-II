@@ -1,27 +1,32 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sat Jun  1 01:23:26 2024
+[*] Sat Jun  1 05:38:31 2024
 [*]
 [dumpfile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/quiz4/ondas.vcd"
-[dumpfile_mtime] "Sat Jun  1 01:22:49 2024"
-[dumpfile_size] 1409
+[dumpfile_mtime] "Sat Jun  1 05:38:25 2024"
+[dumpfile_size] 1178
 [savefile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/quiz4/ondas.gtkw"
 [timestart] 0
 [size] 1364 717
 [pos] -1 -1
-*-2.736966 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-2.499926 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
 [sst_width] 199
 [signals_width] 126
 [sst_expanded] 1
 [sst_vpaned_height] 198
 @28
-testbench.UUT.clk
-testbench.UUT.Switch
+testbench.UUT.CLK
+testbench.UUT.REINICIO
+testbench.UUT.ARRANQUE
 @29
-testbench.UUT.state[4:0]
+testbench.UUT.MODO
 @28
-testbench.UUT.counter[2:0]
-testbench.UUT.gate
+testbench.UUT.MOTOR2
+testbench.UUT.MOTOR1
+testbench.UUT.state[3:0]
+@24
+testbench.UUT.BATERIA[5:0]
+testbench.UUT.TANQUE[5:0]
 [pattern_trace] 1
 [pattern_trace] 0

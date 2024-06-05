@@ -12,7 +12,7 @@ module test (
 
     always
     begin
-        #2 clk=!clk;               // Semiciclo = 100 ms
+        #1 clk=!clk;               // Semiciclo = 100 ms
     end
 
     initial
