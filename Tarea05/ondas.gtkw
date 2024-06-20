@@ -1,0 +1,61 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu Jun 20 08:03:24 2024
+[*]
+[dumpfile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea05/ondas.vcd"
+[dumpfile_mtime] "Thu Jun 20 08:03:09 2024"
+[dumpfile_size] 4792
+[savefile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea05/ondas.gtkw"
+[timestart] 0
+[size] 1364 717
+[pos] -1 -1
+*-5.328180 148 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[sst_width] 199
+[signals_width] 195
+[sst_expanded] 1
+[sst_vpaned_height] 198
+@200
+-Main
+@28
+testbench.CLK
+testbench.RESET
+@c00028
+[color] 2
+testbench.UUT.SLOW_CLOCK[1:0]
+@28
+(0)testbench.UUT.SLOW_CLOCK[1:0]
+(1)testbench.UUT.SLOW_CLOCK[1:0]
+@1401200
+-group_end
+@28
+testbench.I2C_ADDR[6:0]
+@22
+testbench.UUT.state[4:0]
+@28
+testbench.UUT.START_STB
+testbench.UUT.CURRENT_SDA
+@29
+testbench.SCL
+@28
+testbench.RNW
+testbench.SDA_IN
+testbench.SDA_OE
+testbench.SDA_OUT
+testbench.TWOBYTE
+@22
+testbench.RD_DATA[15:0]
+testbench.WR_DATA[15:0]
+@28
+testbench.UUT.POSEDGE_SCL
+testbench.UUT.NEGEDGE_SCL
+testbench.UUT.POSEDGE_SDA
+testbench.UUT.NEGEDGE_SDA
+testbench.UUT.START
+testbench.UUT.INDEX[2:0]
+testbench.UUT.HI[7:0]
+testbench.UUT.LO[7:0]
+testbench.UUT.WR_DATA[15:0]
+testbench.UUT.TIH
+[pattern_trace] 1
+[pattern_trace] 0
