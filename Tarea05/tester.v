@@ -59,6 +59,7 @@ initial
     #8
     SDA_IN = 1;
     #100
+    #100
     $finish;
   end     
 

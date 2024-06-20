@@ -98,7 +98,7 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     SLOW_CLOCK <= 2'b11;
     LAST_SCL <= 1;
     LAST_SDA <= 1;
-    ADDR_RNW <= {I2C_ADDR, RNW};
+    ADDR_RNW <= {I2C_ADDR, 1'b1 /*RNW*/};
     RD_DATA = 0;
 
   /*AUTORESET*/
@@ -168,6 +168,7 @@ case(state)
       end
   end
   await: begin
+  NEXT_INDEX = 0;
   SDA_OE = 0;
     if (NEGEDGE_SCL) begin 
     SDA_OUT = 1;
@@ -183,21 +184,24 @@ case(state)
   end
 
   write: begin
-  if (~SDA_IN) NEXT_INDEX = 0;
-  if (TIH) begin
-          if (NEGEDGE_SCL && START) begin
+    if (NEGEDGE_SCL && START) begin
+    if (TWOBYTE) begin
       SDA_OUT = HI[7-INDEX];
-      if (INDEX == 7) begin
-        //  nextState = await;
-      end else begin
-      NEXT_INDEX = INDEX+1;
-      end
-      end
-  end else begin
+    end else begin
+      SDA_OUT = LO[7-INDEX];
+    end
+    if (INDEX == 7) begin
+      nextState = await;
+    end else begin
+    NEXT_INDEX = INDEX+1;
+    end
+    end
+
+    if (~SDA_IN) NEXT_INDEX = 0;  
 
   end
-  end
   
+
   default:  begin
   end          
 endcase
