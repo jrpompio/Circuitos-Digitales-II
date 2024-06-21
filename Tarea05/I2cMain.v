@@ -1,8 +1,8 @@
-module I2cMaster (/*AUTOARG*/
+module I2cMain (/*AUTOARG*/
    // Outputs
    SDA_OUT, SDA_OE, RD_DATA, SCL,
    // Inputs
-   CLK, RESET, RNW, START_STB, SDA_IN, TWOBYTE, I2C_ADDR, WR_DATA
+   CLK, RESET, RNW, START_STB, SDA_IN, I2C_ADDR, WR_DATA
    );
 
 /*AUTOINPUT*/
@@ -11,8 +11,7 @@ input
   RESET,
   RNW,
   START_STB,
-  SDA_IN,
-  TWOBYTE;
+  SDA_IN;
 
 input [6:0]
   I2C_ADDR; 
@@ -49,7 +48,10 @@ reg
   START,
   LAST_SDA,
   LAST_SCL,
-  TIH;
+  TIH,
+  NEXT_TIH,
+  DELAY,
+  NEXT_DELAY;
   
 wire
   CURRENT_SDA,
@@ -74,13 +76,14 @@ assign CURRENT_SDA = SDA_IN && SDA_OUT;
 /******************************************************************************
                               PARAMETROS DE ESTADO
  *****************************************************************************/
-parameter N = 5;  // PARAMETRO PARA CANTIDAD DE ESTADOS
+parameter N = 6;  // PARAMETRO PARA CANTIDAD DE ESTADOS
 
 parameter standby = {{(N-1){1'b0}} , 1'b1}; // CONCATENANDO N-1 CEROS CON UN 1 
 parameter address = standby << 1;
 parameter await = standby << 2;
-parameter read  = standby << 3;
+parameter stop = standby << 3;
 parameter write = standby << 4;
+parameter read  = standby << 5;
 
 // REGISTROS INTERNO PARA MANEJO DE ESTADOS
 reg [N-1:0] state, nextState;
@@ -98,7 +101,7 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     SLOW_CLOCK <= 2'b11;
     LAST_SCL <= 1;
     LAST_SDA <= 1;
-    ADDR_RNW <= {I2C_ADDR, 1'b1 /*RNW*/};
+    ADDR_RNW <= {I2C_ADDR, RNW};
     RD_DATA = 0;
 
   /*AUTORESET*/
@@ -107,6 +110,7 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
   INDEX <= 3'h0;
   LO <= 8'h0;
   TIH <= 1'h0;
+  DELAY <= 0;
   // End of automatics
 
   end else begin              
@@ -115,16 +119,13 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     LAST_SDA <= CURRENT_SDA;
     state <= nextState;    
     INDEX <= NEXT_INDEX;  
+    TIH <= NEXT_TIH;
+    DELAY <= NEXT_DELAY;
 
     if (START_STB) begin
       SDA_OUT <= 0;
-
       {HI, LO} = WR_DATA;
-
-      if (TWOBYTE) begin
-        TIH <= 1;
-      end
-    
+      TIH <= 1;
     end 
 
     if (NEGEDGE_SDA && SCL) begin
@@ -137,6 +138,8 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
       SLOW_CLOCK <= SLOW_CLOCK+1;
     end
 
+    if (state == standby) SLOW_CLOCK <= 2'b11;
+    if (~(state == await)) DELAY <= 0;
   
   end
 end
@@ -146,37 +149,53 @@ always @(*) begin   // LÓGICA COMBINACIONAL
                               // SOSTENIENDO VALORES DE FF
 nextState = state;
 NEXT_INDEX = INDEX;
+NEXT_TIH = TIH;
+NEXT_DELAY = DELAY;
                               // VALORES DE OUTPUTS POR DEFECTO
 SDA_OE = 1;
 
 /*CASOS PARA CADA ESTADO*/
 case(state)
   standby: begin
-    START = 0;
-    if (START_STB) begin
+    if (START) begin
     nextState = address;
     end
   end
   address: begin
-      if (NEGEDGE_SCL && START) begin
+      if (NEGEDGE_SCL) begin
       SDA_OUT = ADDR_RNW[7-INDEX];
       if (INDEX == 7) begin
-         nextState = await;
+        nextState = await;
       end else begin
-      NEXT_INDEX = INDEX+1;
+        NEXT_INDEX = INDEX+1;
       end
       end
   end
+
   await: begin
   NEXT_INDEX = 0;
   SDA_OE = 0;
-    if (NEGEDGE_SCL) begin 
-    SDA_OUT = 1;
-    end else begin
-      if (~SDA_IN) begin
-      nextState = RNW ? read : write;
+    if (NEGEDGE_SCL) begin
+      SDA_OUT = 1;
+      SDA_OE = 0;
+      NEXT_DELAY = 1;
+    end else if (POSEDGE_SCL) begin
+      if (DELAY) begin
+        if (~SDA_IN ) begin
+          nextState = RNW ? read : write;
+        end else begin
+          nextState = stop;
+        end
       end
     end
+  end
+
+  stop: begin
+    if (POSEDGE_SCL) begin
+      SDA_OUT = 0;
+    if (~DELAY) SDA_OUT = 1;
+    end
+    if (~START) nextState = standby;
   end
 
   read: begin
@@ -184,17 +203,21 @@ case(state)
   end
 
   write: begin
-    if (NEGEDGE_SCL && START) begin
-    if (TWOBYTE) begin
-      SDA_OUT = HI[7-INDEX];
-    end else begin
-      SDA_OUT = LO[7-INDEX];
-    end
-    if (INDEX == 7) begin
-      nextState = await;
-    end else begin
-    NEXT_INDEX = INDEX+1;
-    end
+
+    if (NEGEDGE_SCL && START) 
+    begin
+      if (TIH) begin
+        SDA_OUT = HI[7-INDEX];
+      end else begin
+        SDA_OUT = LO[7-INDEX];
+      end
+
+      if (INDEX == 7) begin
+        nextState = await;
+        NEXT_TIH = 0;
+      end else begin
+      NEXT_INDEX = INDEX+1;
+      end
     end
 
     if (~SDA_IN) NEXT_INDEX = 0;  
