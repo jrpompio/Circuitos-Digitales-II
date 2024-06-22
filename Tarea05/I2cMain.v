@@ -107,7 +107,7 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     RD_DATA = 0;
     NINE_COUNTER <= 0;
 
-  /*AUTO<None>RESET*/
+  /*AUTORESET*/
   // Beginning of autoreset for uninitialized flops
   HI <= 8'h0;
   INDEX <= 3'h0;

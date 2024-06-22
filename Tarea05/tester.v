@@ -58,13 +58,14 @@ initial
   begin                        
     CLK = 1;                      
     RESET = 0;
-    RNW = 0;
+    RNW = 1;
     I2C_ADDR = 7'b0011010;
     I2CS_ADDR = 7'b0011010;
     I2CS2_ADDR = 7'b0011110;
     START_STB = 0;
     WR_DATA = 16'b1010101010101101;
     RDS_DATA = 16'b1110111011101101;
+    RDS2_DATA = 16'b1111111111111111;
     #ciclo
     RESET = 1;
     #1

@@ -150,6 +150,7 @@ end else begin
 end
 
                               // VALORES DE OUTPUTS POR DEFECTO
+if (state != read)
 SDA_IN = 1;
 /*CASOS PARA CADA ESTADO*/
 case(state)
@@ -176,18 +177,22 @@ case(state)
    end
 
   await: begin
+
     NEXT_INDEX = 0;
     if (ADDR_RNW_S[7:1] == I2CS_ADDR)
     begin
-      SDA_IN = 0;
-      if (NEGEDGE_SCL) begin
-      nextState = ADDR_RNW_S[0] ? read : write;
-      end
+        if (ADDR_RNW_S[0]) begin
+          SDA_IN = 1;
+          if (NEGEDGE_SCL) nextState = read;
+        end else begin
+          SDA_IN = 0;
+         if (NEGEDGE_SCL) nextState = write;
+        end
     end else begin
       nextState = stop;
       SDA_IN = 1;
     end
-  
+
   end
 
   stop: begin
@@ -195,6 +200,25 @@ case(state)
   end
 
   read: begin
+
+    if (NEGEDGE_SCL && START) 
+    begin
+      if (TIH) begin
+        SDA_IN = HI[7-INDEX];
+        $display("%b", SDA_IN);
+      end else begin
+        SDA_IN = LO[7-INDEX];
+      end
+
+      if (INDEX == 7) begin
+        nextState = await;
+        NEXT_TIH = 0;
+      end else begin
+      NEXT_INDEX = INDEX+1;
+      end
+    end
+
+   // if (~SDA_IN) NEXT_INDEX = 0;
 
   end
 
