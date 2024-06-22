@@ -1,36 +1,37 @@
 module tester (/*AUTOARG*/
    // Outputs
-   CLK, RESET, RNW, START_STB, I2C_ADDR, I2CS_ADDR, WR_DATA,
-   RDS_DATA,
+   CLK, RESET, RNW, START_STB, SDA_IN, I2C_ADDR, I2CS_ADDR,
+   I2CS2_ADDR, WR_DATA, RDS_DATA, RDS2_DATA,
    // Inputs
-  RD_DATA, WRS_DATA, SDA_OUT, SCL
+   SDA_OUT, SDA_OE, SCL, RD_DATA, WRS_DATA, WRS2_DATA
    );
 
 output reg 
   CLK,        
   RESET,
   RNW,
-  START_STB,
-  SDA_IN;
+  START_STB;
 
 output reg [6:0]
   I2C_ADDR, 
-  I2CS_ADDR; 
+  I2CS_ADDR,
+  I2CS2_ADDR; 
 
 output reg [15:0]
   WR_DATA,
-  RDS_DATA;
+  RDS_DATA,
+  RDS2_DATA;
 
 input
+  SDA_IN,
   SDA_OUT,
   SDA_OE,
   SCL;
 
 input [15:0]
   RD_DATA,
-  WRS_DATA;
-
-reg START_TESTER;
+  WRS_DATA,
+  WRS2_DATA;
 
 parameter semiCiclo = 0.5;
 parameter ciclo = 1;
@@ -60,6 +61,7 @@ initial
     RNW = 0;
     I2C_ADDR = 7'b0011010;
     I2CS_ADDR = 7'b0011010;
+    I2CS2_ADDR = 7'b0011110;
     START_STB = 0;
     WR_DATA = 16'b1010101010101101;
     RDS_DATA = 16'b1110111011101101;
@@ -70,15 +72,16 @@ initial
     #ciclo
     #ciclo
     START_STB = 0;
-    #100;
-    #100;
-    #50;
-    WR_DATA = 16'b1110101010111101;
+    #124;
     START_STB = 1;
     #ciclo
     #ciclo
     START_STB = 0;
-    #300
+    // CAMBIOS DE DATOS
+    #2
+    // TIEMPO PARA TRANSFERENCIA
+    #124;
+
     $display("Terminating simulation...");
 
     $finish;

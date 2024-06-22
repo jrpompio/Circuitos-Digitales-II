@@ -1,4 +1,4 @@
-module I2cSecondary (/*AUTOARG*/
+module I2cSecondary  (/*AUTOARG*/
    // Outputs
    SDA_IN, WRS_DATA,
    // Inputs
@@ -184,6 +184,7 @@ case(state)
       nextState = ADDR_RNW_S[0] ? read : write;
       end
     end else begin
+      nextState = stop;
       SDA_IN = 1;
     end
   

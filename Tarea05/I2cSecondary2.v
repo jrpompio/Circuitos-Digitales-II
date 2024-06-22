@@ -184,6 +184,7 @@ case(state)
       nextState = ADDR_RNW_S2[0] ? read : write;
       end
     end else begin
+      nextState = stop;
       SDA_IN = 1;
     end
   

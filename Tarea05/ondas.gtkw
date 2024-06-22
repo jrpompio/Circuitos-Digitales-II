@@ -1,20 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Fri Jun 21 23:21:07 2024
+[*] Sat Jun 22 07:55:00 2024
 [*]
 [dumpfile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea05/ondas.vcd"
-[dumpfile_mtime] "Fri Jun 21 23:01:03 2024"
-[dumpfile_size] 16455
+[dumpfile_mtime] "Sat Jun 22 07:54:36 2024"
+[dumpfile_size] 20930
 [savefile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea05/ondas.gtkw"
-[timestart] 3
+[timestart] 0
 [size] 1364 717
 [pos] -1 -1
-*-6.918333 556 8 238 80 260 152 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-[markername] Aaddr
-[markername] BStop
-[markername] CDatos 1
-[markername] Daddr
-[markername] EDatos 2
+*-15.762589 129000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
 [treeopen] testbench.UUT2.
 [sst_width] 199
@@ -48,7 +43,7 @@ testbench.UUT.START_STB
 @22
 testbench.UUT2.state[5:0]
 testbench.UUT2.NINE_COUNTER[3:0]
-@29
+@28
 testbench.UUT2.INDEX[2:0]
 @200
 -Main vs Secondary
@@ -65,5 +60,11 @@ testbench.UUT2.WRS_DATA[15:0]
 testbench.UUT.RD_DATA[15:0]
 [color] 4
 testbench.UUT2.RDS_DATA[15:0]
+@200
+-Secondary 2
+@22
+testbench.UUT3.state[5:0]
+@23
+testbench.UUT3.NINE_COUNTER[3:0]
 [pattern_trace] 1
 [pattern_trace] 0
