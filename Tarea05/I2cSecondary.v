@@ -32,21 +32,23 @@ output reg [15:0]
 reg [7:0]
   HI, 
   LO,
-  ADDR_RNW;
+  ADDR_RNW_S;
 
 
 reg [2:0] 
   INDEX,
   NEXT_INDEX;
 
+reg [3:0]
+  NINE_COUNTER,
+  NEXT_NC;
+
 reg
   START,
   LAST_SDA,
   LAST_SCL,
   TIH,
-  NEXT_TIH,
-  DELAY,
-  NEXT_DELAY;
+  NEXT_TIH;
   
 wire
   CURRENT_SDA,
@@ -93,13 +95,15 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     START <= 0;
     LAST_SCL <= 1;
     LAST_SDA <= 1;
-    ADDR_RNW <= 0;
+    ADDR_RNW_S <= 0;
     TIH <= 1'h0;
     HI <= 0;
     LO <= 0;
+    NINE_COUNTER = 0;
+    WRS_DATA = 0;
+
   /*AUTORESET*/
   // Beginning of autoreset for uninitialized flops
-  DELAY <= 1'h0;
   INDEX <= 3'h0;
   // End of automatics
 
@@ -110,14 +114,19 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     state <= nextState;    
     INDEX <= NEXT_INDEX;  
     TIH <= NEXT_TIH;
-    DELAY <= NEXT_DELAY;
+    NINE_COUNTER <= NEXT_NC;
 
     if (NEGEDGE_SDA && SCL) begin
       START <= 1;
     end else if (POSEDGE_SDA && SCL) begin
       START <=0;
     end
-    if (state == standby) TIH <= 1;
+
+    if (state == standby) begin
+          HI <= 8'h0;
+          LO <= 8'h0;
+          TIH <= 1;
+    end  
   end
 end
 
@@ -127,7 +136,19 @@ always @(*) begin   // LÓGICA COMBINACIONAL
 nextState = state;
 NEXT_INDEX = INDEX;
 NEXT_TIH = TIH;
-NEXT_DELAY = DELAY;
+NEXT_NC = NINE_COUNTER;
+
+// ESTADOS QUE NO SEAN stanby o stop
+if (~((state == standby) || (state == stop))) begin
+  if (POSEDGE_SCL) begin
+    NEXT_NC = NINE_COUNTER+1;
+    if (NINE_COUNTER == 8 ) NEXT_NC = 0;
+  end
+// CASO CONTRARIO
+end else begin
+    NEXT_NC = 0;
+end
+
                               // VALORES DE OUTPUTS POR DEFECTO
 SDA_IN = 1;
 /*CASOS PARA CADA ESTADO*/
@@ -140,27 +161,27 @@ case(state)
 
   address: begin
     if (POSEDGE_SCL) begin
-        ADDR_RNW[7-INDEX] = SDA_OUT;
+        ADDR_RNW_S[7-INDEX] = SDA_OUT;
       if (~(INDEX == 7)) begin
         NEXT_INDEX = INDEX+1;
       end
     end
 
     if (NEGEDGE_SCL) begin
-      if (INDEX == 7) NEXT_DELAY = 1;
-      if (DELAY) nextState = await;
+      if ((NINE_COUNTER == 8)) nextState = await;
+      // if (INDEX == 7) NEXT_DELAY = 1;
+      // if (DELAY) nextState = await;
     end
 
    end
 
   await: begin
     NEXT_INDEX = 0;
-    if (ADDR_RNW[7:1] == I2CS_ADDR)
+    if (ADDR_RNW_S[7:1] == I2CS_ADDR)
     begin
       SDA_IN = 0;
       if (NEGEDGE_SCL) begin
-      nextState = ADDR_RNW[0] ? read : write;
-      NEXT_DELAY = 0;
+      nextState = ADDR_RNW_S[0] ? read : write;
       end
     end else begin
       SDA_IN = 1;
@@ -169,6 +190,7 @@ case(state)
   end
 
   stop: begin
+    if (~START) nextState = standby;
   end
 
   read: begin
@@ -182,8 +204,14 @@ case(state)
       end else begin
         LO[7-INDEX] = SDA_OUT;
       end
+
       if (INDEX == 7) begin
-        nextState = await;
+        if (TIH) begin
+          nextState = await;
+        end else begin
+          WRS_DATA = {HI, LO};
+          nextState = stop;
+        end
         NEXT_TIH = 0;
       end else begin
         NEXT_INDEX = INDEX+1;

@@ -41,17 +41,19 @@ reg [2:0]
   INDEX,
   NEXT_INDEX;
 
-reg [1:0]
+reg [2:0]
   SLOW_CLOCK;
+
+reg [3:0]
+  NINE_COUNTER,
+  NEXT_NC;
 
 reg
   START,
   LAST_SDA,
   LAST_SCL,
   TIH,
-  NEXT_TIH,
-  DELAY,
-  NEXT_DELAY;
+  NEXT_TIH;
   
 wire
   CURRENT_SDA,
@@ -103,14 +105,14 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     LAST_SDA <= 1;
     ADDR_RNW <= {I2C_ADDR, RNW};
     RD_DATA = 0;
+    NINE_COUNTER <= 0;
 
-  /*AUTORESET*/
+  /*AUTO<None>RESET*/
   // Beginning of autoreset for uninitialized flops
   HI <= 8'h0;
   INDEX <= 3'h0;
   LO <= 8'h0;
   TIH <= 1'h0;
-  DELAY <= 0;
   // End of automatics
 
   end else begin              
@@ -120,7 +122,7 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     state <= nextState;    
     INDEX <= NEXT_INDEX;  
     TIH <= NEXT_TIH;
-    DELAY <= NEXT_DELAY;
+    NINE_COUNTER <= NEXT_NC;
 
     if (START_STB) begin
       SDA_OUT <= 0;
@@ -138,9 +140,9 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
       SLOW_CLOCK <= SLOW_CLOCK+1;
     end
 
-    if (state == standby) SLOW_CLOCK <= 2'b11;
-    if (~(state == await)) DELAY <= 0;
-  
+    if (state == standby) begin
+       SLOW_CLOCK <= 2'b11;
+    end  
   end
 end
 
@@ -150,9 +152,19 @@ always @(*) begin   // LÓGICA COMBINACIONAL
 nextState = state;
 NEXT_INDEX = INDEX;
 NEXT_TIH = TIH;
-NEXT_DELAY = DELAY;
+NEXT_NC = NINE_COUNTER;
                               // VALORES DE OUTPUTS POR DEFECTO
 SDA_OE = 1;
+
+// CUALQUIER ESTADO
+if (~(state == standby)) begin
+  if (POSEDGE_SCL) begin
+    NEXT_NC = NINE_COUNTER+1;
+    if (NINE_COUNTER == 8 ) NEXT_NC = 0;
+  end
+end else begin
+    NEXT_NC = 0;
+end
 
 /*CASOS PARA CADA ESTADO*/
 case(state)
@@ -178,9 +190,8 @@ case(state)
     if (NEGEDGE_SCL) begin
       SDA_OUT = 1;
       SDA_OE = 0;
-      NEXT_DELAY = 1;
     end else if (POSEDGE_SCL) begin
-      if (DELAY) begin
+      if (NINE_COUNTER == 8) begin
         if (~SDA_IN ) begin
           nextState = RNW ? read : write;
         end else begin
@@ -193,7 +204,7 @@ case(state)
   stop: begin
     if (POSEDGE_SCL) begin
       SDA_OUT = 0;
-    if (~DELAY) SDA_OUT = 1;
+    if (NINE_COUNTER > 0) SDA_OUT = 1;
     end
     if (~START) nextState = standby;
   end

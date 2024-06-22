@@ -1,6 +1,8 @@
+`timescale 1 ms / 1 ms  // time-unit = 100ms , precision = 10 ms
+
 `include "tester.v"
 `include "I2cMain.v"
-`include "I2cSecondary.v"
+`include "I2cSecondary.v"2
 
 module testbench;
 /*AUTOWIRE*/
@@ -23,6 +25,9 @@ wire [15:0]             WR_DATA;                // From TESTER of tester.v
 
 initial begin
     $dumpfile("ondas.vcd");
+   $dumpvars(-1, UUT);
+   $dumpvars(-1, UUT2);
+   $dumpvars(-1, UUT3);
     $dumpvars;
 end
 
@@ -54,12 +59,27 @@ I2cSecondary UUT2 (/*AUTOINST*/
                    .RDS_DATA            (RDS_DATA[15:0]),
                    .I2CS_ADDR           (I2CS_ADDR[6:0]));
 
+I2cSecondary UUT3 (/*AUTOINST*/
+                   // Outputs
+                   .SDA_IN              (SDA_IN),
+                   .WRS_DATA            (WRS_DATA[15:0]),
+                   // Inputs
+                   .CLK                 (CLK),
+                   .RESET               (RESET),
+                   .SDA_OUT             (SDA_OUT),
+                   .SDA_OE              (SDA_OE),
+                   .SCL                 (SCL),
+                   .RDS_DATA            (RDS_DATA[15:0]),
+                   .I2CS_ADDR           (I2CS_ADDR[6:0]));
+
 tester TESTER(/*AUTOINST*/
               // Outputs
               .CLK                      (CLK),
               .RESET                    (RESET),
               .RNW                      (RNW),
               .START_STB                (START_STB),
+              .SDA_OUT                  (SDA_OUT),
+              .SCL                      (SCL),
               .I2C_ADDR                 (I2C_ADDR[6:0]),
               .I2CS_ADDR                (I2CS_ADDR[6:0]),
               .WR_DATA                  (WR_DATA[15:0]),
