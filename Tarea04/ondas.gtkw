@@ -1,0 +1,42 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Mon Jun 10 09:58:24 2024
+[*]
+[dumpfile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea04/ondas.vcd"
+[dumpfile_mtime] "Mon Jun 10 09:57:44 2024"
+[dumpfile_size] 1965
+[savefile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea04/ondas.gtkw"
+[timestart] 0
+[size] 1364 717
+[pos] -1 -1
+*-2.978328 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[sst_width] 199
+[signals_width] 177
+[sst_expanded] 1
+[sst_vpaned_height] 198
+@28
+testbench.RESET
+testbench.CPH
+testbench.CKP
+testbench.CLK
+@22
+testbench.UUT.DATAINPUT[7:0]
+@28
+testbench.UUT.STATE[1:0]
+testbench.UUT.CS
+@22
+testbench.UUT.INTERNALDATA[7:0]
+@28
+testbench.UUT.MISO
+testbench.UUT.MOSI
+@200
+-
+@28
+testbench.UUT.DIVFREQ[1:0]
+testbench.UUT.SCK
+testbench.UUT.ENABLE
+@29
+testbench.UUT.CS
+[pattern_trace] 1
+[pattern_trace] 0
