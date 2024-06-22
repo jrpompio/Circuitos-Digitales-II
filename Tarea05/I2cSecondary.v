@@ -48,7 +48,9 @@ reg
   LAST_SDA,
   LAST_SCL,
   TIH,
-  NEXT_TIH;
+  NEXT_TIH,
+  ISADD,
+  NEXT_ISADD;
   
 wire
   CURRENT_SDA,
@@ -101,6 +103,7 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     LO <= 0;
     NINE_COUNTER = 0;
     WRS_DATA = 0;
+    ISADD <= 1;
 
   /*AUTORESET*/
   // Beginning of autoreset for uninitialized flops
@@ -115,6 +118,7 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
     INDEX <= NEXT_INDEX;  
     TIH <= NEXT_TIH;
     NINE_COUNTER <= NEXT_NC;
+    ISADD <= NEXT_ISADD;
 
     if (NEGEDGE_SDA && SCL) begin
       START <= 1;
@@ -126,6 +130,7 @@ always @(posedge CLK) begin // LÓGICA SECUENCIAL
           HI <= 8'h0;
           LO <= 8'h0;
           TIH <= 1;
+          ISADD <= 1;
     end  
   end
 end
@@ -137,6 +142,7 @@ nextState = state;
 NEXT_INDEX = INDEX;
 NEXT_TIH = TIH;
 NEXT_NC = NINE_COUNTER;
+NEXT_ISADD = ISADD;
 
 // ESTADOS QUE NO SEAN stanby o stop
 if (~((state == standby) || (state == stop))) begin
@@ -181,13 +187,25 @@ case(state)
     NEXT_INDEX = 0;
     if (ADDR_RNW_S[7:1] == I2CS_ADDR)
     begin
+        // LECTURA
         if (ADDR_RNW_S[0]) begin
-          SDA_IN = 1;
-          if (NEGEDGE_SCL) nextState = read;
+
+          if (ISADD) begin
+            SDA_IN = 0;
+          end else begin
+            SDA_IN = 1;
+          end
+          
+          if (NEGEDGE_SCL) begin
+             NEXT_ISADD = 0;
+             nextState = read;
+          end
+        // ESCRITURA
         end else begin
           SDA_IN = 0;
          if (NEGEDGE_SCL) nextState = write;
         end
+
     end else begin
       nextState = stop;
       SDA_IN = 1;
@@ -204,10 +222,10 @@ case(state)
     if (NEGEDGE_SCL && START) 
     begin
       if (TIH) begin
-        SDA_IN = HI[7-INDEX];
+        SDA_IN = RDS_DATA[15-INDEX];
         $display("%b", SDA_IN);
       end else begin
-        SDA_IN = LO[7-INDEX];
+        SDA_IN = RDS_DATA[7-INDEX];
       end
 
       if (INDEX == 7) begin

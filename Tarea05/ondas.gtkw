@@ -1,18 +1,18 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sat Jun 22 09:55:00 2024
+[*] Sat Jun 22 21:27:25 2024
 [*]
-[dumpfile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea05/ondas.vcd"
-[dumpfile_mtime] "Sat Jun 22 09:52:59 2024"
-[dumpfile_size] 20780
-[savefile] "/home/pompo/Universidad/verilog/Circuitos-Digitales-II/Tarea05/ondas.gtkw"
+[dumpfile] "/home/dark/Verilog/Circuitos-Digitales-II/Tarea05/ondas.vcd"
+[dumpfile_mtime] "Sat Jun 22 21:25:43 2024"
+[dumpfile_size] 19044
+[savefile] "/home/dark/Verilog/Circuitos-Digitales-II/Tarea05/ondas.gtkw"
 [timestart] 0
-[size] 1364 717
+[size] 1360 700
 [pos] -1 -1
-*-14.762589 75000 39000 75000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-14.762589 47000 39000 75000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
 [treeopen] testbench.UUT2.
-[sst_width] 199
+[sst_width] 212
 [signals_width] 195
 [sst_expanded] 1
 [sst_vpaned_height] 198
@@ -27,7 +27,6 @@ testbench.SDA_IN
 testbench.SDA_OUT
 [color] 7
 testbench.UUT.CURRENT_SDA
-@29
 [color] 5
 testbench.SCL
 @200
@@ -60,10 +59,47 @@ testbench.UUT2.ADDR_RNW_S[7:0]
 testbench.UUT.WR_DATA[15:0]
 [color] 4
 testbench.UUT2.WRS_DATA[15:0]
+@29
 [color] 2
 testbench.UUT.RD_DATA[15:0]
+@800028
 [color] 4
 testbench.UUT2.RDS_DATA[15:0]
+@28
+[color] 4
+(0)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(1)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(2)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(3)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(4)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(5)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(6)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(7)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(8)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(9)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(10)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(11)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(12)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(13)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(14)testbench.UUT2.RDS_DATA[15:0]
+[color] 4
+(15)testbench.UUT2.RDS_DATA[15:0]
+@1001200
+-group_end
 @200
 -Secondary 2
 @22
